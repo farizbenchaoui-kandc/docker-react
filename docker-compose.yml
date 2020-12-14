@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    build:
+      #context specifies where we want all of our files to be pulled from 
+      context: .
+      dockerfile: Dockerfile.dev
+    #ports we can declare a list of ports
+    ports:
+      - "3000:3000"
+    volumes:
+      #this signifies do not try to map this directory
+      - /app/node_modules  
+      #this signifies us wanting to map the directory outside the container to /pp
+      - .:/app
+    #this to deal with a bug in react where it exits when starting a docker compose
+    stdin_open: true 
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]      
